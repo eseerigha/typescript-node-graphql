@@ -6,9 +6,17 @@ import * as repositories from "./ioc/root";
 const app = express();
 const port = `${process.env.SERVER_PORT}`;
 
+// The root provides a resolver function for each API endpoint
+let root = {
+  hello: () => {
+    return 'Hello world!';
+  },
+};
+
 app.use("/graphql", ExpressGraphQL({
   schema,
   graphiql: true,
+  rootValue: root,
   context: {
     ...repositories
   }
