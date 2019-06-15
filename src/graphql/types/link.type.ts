@@ -1,4 +1,4 @@
-import {GraphQLObjectType, GraphQLID, GraphQLString, GraphQLList,GraphQLNullableType} from "graphql";
+import {GraphQLObjectType, GraphQLID, GraphQLString, GraphQLList} from "graphql";
 import UserType from "./user.type";
 import VoteType from "./vote.type";
 
