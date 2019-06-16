@@ -1,5 +1,7 @@
 import {Types} from "mongoose";
+import {IBaseQuery} from "../../query";
+
 export interface IReadable<T> {
-    findAll(): Promise<T>;
-    findOneById(id: Types.ObjectId): Promise<T>;
+    findAll(query?: IBaseQuery): Promise<T[]>;
+    findOneById(id: string): Promise<T>;
 }

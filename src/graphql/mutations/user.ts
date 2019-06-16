@@ -1,18 +1,22 @@
 import {GraphQLNonNull, GraphQLString} from "graphql";
 import {UserType} from "../types";
+import {IUserRepository} from "../../modules/repositories/interfaces";
+import {IUserDto} from "../../modules/dto";
 
-const userMutation = {
+const addUser = {
     type: UserType,
     args: {
-        firstname: { type: GraphQLNonNull(GraphQLString) },
-        lastname: { type: GraphQLNonNull(GraphQLString) },
+        email: {type: new GraphQLNonNull(GraphQLString)},
+        firstname: { type: new GraphQLNonNull(GraphQLString)},
+        lastname: { type:  new GraphQLNonNull(GraphQLString)},
     },
-    resolve: (root: any, args: any, context: any, info: any) => {
-        // var person = new PersonModel(args);
-        // return person.save();
+    resolve: async (root: any, args: IUserDto, {userRepository}:{userRepository: IUserRepository}, info: any) => {
+        
+        const user = await userRepository.create(args);
+        return user;
     },
 };
 
 export {
-    userMutation,
+    addUser,
 };

@@ -3,6 +3,8 @@ import {Document, Model} from "mongoose";
 import {IBaseEntity} from "../../entities/IBase.entity";
 import {IBaseRepository} from "../interfaces/IBase.repository";
 import {Types} from "mongoose";
+import {IBaseQuery} from "../../query";
+import {IBaseDto} from "../../dto";
 
 @injectable()
 class BaseRepository<T extends IBaseEntity> implements IBaseRepository<T> {
@@ -13,24 +15,26 @@ class BaseRepository<T extends IBaseEntity> implements IBaseRepository<T> {
         this._model = schemaModel;
     }
 
-    public async create(): Promise<any> {
+    public async create(model: IBaseDto): Promise<any> {
+        const createdEntity = new this._model(model);
+        return await createdEntity.save();
+    }
+
+    public async findAll(query: IBaseQuery = {}): Promise<T[]>{
+        return this._model.find(query).lean().exec();
+    }
+
+    public async findOneById(id: string): Promise<T> {
+        return this._model.findById(this.toObjectId(id)).lean().exec();
+    }
+
+    public async update(): Promise<any> {
         return Promise.resolve({});
     }
 
-    public async findAll(): Promise<any> {
-        return Promise.resolve({'Hello': 'Hello'});
-    }
-
-    public async findOneById(id: Types.ObjectId ): Promise<any> {
-        return Promise.resolve({});
-    }
-
-    public async update(id: Types.ObjectId): Promise<any> {
-        return Promise.resolve({});
-    }
-
-    public async delete(id: Types.ObjectId): Promise<any> {
-        return Promise.resolve({});
+    public async delete(id: string): Promise<boolean> {
+        //return this._model.findByIdAndDelete(this.toObjectId(id)).lean().exec();
+        return Promise.resolve(true);
     }
 
     private toObjectId(_id: string): Types.ObjectId {

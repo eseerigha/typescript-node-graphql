@@ -1,6 +1,6 @@
-import {GraphQLObjectType, GraphQLID, GraphQLString, GraphQLList} from "graphql";
+import {GraphQLObjectType, GraphQLID, GraphQLString, GraphQLNonNull} from "graphql";
 import UserType from "./user.type";
-import VoteType from "./vote.type";
+import {IUserRepository} from "../../modules/repositories/interfaces";
 
 const LinkType: GraphQLObjectType = new GraphQLObjectType({
     name : "Link",
@@ -8,24 +8,16 @@ const LinkType: GraphQLObjectType = new GraphQLObjectType({
         id: { type: GraphQLID },
         description: { type: GraphQLString },
         url: { type: GraphQLString},
+        user_id: {type: new GraphQLNonNull(GraphQLID)},
         postedBy: { 
             type: UserType,
-            resolve: (root: any, args: any, context: any, info: any) => {
-                // return PersonModel.find().exec();
-                // root.id returns the id of the current user
-                //console.log(args.id);
-                return {};
+            resolve: async (root: any, args: any, {userRepository}: {userRepository: IUserRepository}, info: any) => {
+
+                //root corresponds to the current link type
+                let user = await userRepository.findOneById(root.user_id);
+                return user;
             },
-        },
-        votes: {
-            type: GraphQLList(VoteType),
-            resolve: (root: any, args: any, context: any, info: any) => {
-                // return PersonModel.find().exec();
-                // root.id returns the id of the current user
-                //console.log(args.id);
-                return [];
-            },
-        },
+        }
     }),
 });
 

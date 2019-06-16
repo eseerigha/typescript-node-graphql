@@ -11,5 +11,4 @@ class UserRepository extends BaseRepository<IUserEntity> implements IUserReposit
         super(UserSchema);
     }
 }
-
 export default UserRepository;

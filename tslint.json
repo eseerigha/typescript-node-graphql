@@ -10,5 +10,5 @@
       "no-use-before-declare": false,
       "no-empty-interface": false,
     },
-    "rulesDirectory": []
+    "rulesDirectory": [],
   }

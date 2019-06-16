@@ -1,6 +1,8 @@
 import {Types} from "mongoose";
+import {IBaseDto} from "../../dto";
+
 export interface IWritable<T> {
-    create(): Promise<T>;
+    create(model: IBaseDto): Promise<T>;
     update(id: Types.ObjectId): Promise<T>;
-    delete(id: Types.ObjectId): Promise<boolean>;
+    delete(id: string): Promise<boolean>;
 }

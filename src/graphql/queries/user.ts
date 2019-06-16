@@ -1,11 +1,12 @@
 import {GraphQLList, GraphQLString} from "graphql";
 import {UserType} from "../types";
+import {IUserRepository} from "../../modules/repositories/interfaces";
 
 const usersQuery = {
     type: GraphQLList(UserType),
-    resolve: (root: any, args: any, context: any, info: any) => {
-        // return PersonModel.find().exec();
-        return [];
+    resolve: async(root: any, args: any, {userRepository}:{userRepository: IUserRepository}, info: any) => {
+        let users = await userRepository.findAll();
+        return users;
     },
 };
 
@@ -14,10 +15,9 @@ const userQuery = {
     args: {
         id: { type: GraphQLString },
     },
-    resolve: (root: any, args: any, context: any, info: any) => {
-        // return PersonModel.find().exec();
-        //console.log(args.id);
-        return {};
+    resolve: async(root: any, args:any, {userRepository}:{userRepository: IUserRepository}, info: any) => {
+        let user = await userRepository.findOneById(args.id);
+        return user;
     },
 };
 

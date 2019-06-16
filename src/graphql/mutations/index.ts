@@ -1,10 +1,12 @@
 import {GraphQLObjectType} from "graphql";
-import {userMutation} from "../mutations/user";
+import {addUser} from "./user";
+import {addLink} from "./link";
 
 const mutation = new GraphQLObjectType({
     name: "Mutation",
     fields: {
-        user: userMutation,
+        addUser,
+        addLink,
     },
 });
 
