@@ -5,5 +5,5 @@ export interface IUserEntity extends IBaseEntity {
     email: string,
     firstname: string,
     lastname: string,
-    link: ILinkEntity['_id']
+    //link: ILinkEntity['_id']
 }

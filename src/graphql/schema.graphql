@@ -15,8 +15,6 @@
      id: ID!
      description: String!
      url: String!
-     postedBy: User
-     votes: [Vote!]!
    }
 
    type Vote {
@@ -27,5 +25,5 @@
 
 
    type Mutation {
-      createLink(): Link!
+      createLink(url: String!, description: String!): Link!
    }
