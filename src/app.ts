@@ -1,22 +1,21 @@
 require("dotenv").config();
+import {readFileSync} from "fs";
+import {join} from "path";
+import {makeExecutableSchema} from "graphql-tools";
 import express from "express";
 import ExpressGraphQL from "express-graphql";
-import schema from "./graphql/schema";
-import * as repositories from "./ioc/root";
+
+import resolvers from "./graphql/resolvers";
+const schemaFile  = join(__dirname,"/graphql/schema.graphql");
+const typeDefs = readFileSync(schemaFile, 'utf8');
 const app = express();
 const port = `${process.env.SERVER_PORT}`;
-
-// The root provides a resolver function for each API endpoint
-let root = {
-  hello: () => {
-    return 'Hello world!';
-  },
-};
+const schema = makeExecutableSchema({typeDefs,resolvers});
+import * as repositories from "./ioc/root";
 
 app.use("/graphql", ExpressGraphQL({
   schema,
   graphiql: true,
-  rootValue: root,
   context: {
     ...repositories
   }
