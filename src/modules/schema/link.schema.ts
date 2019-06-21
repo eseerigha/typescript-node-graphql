@@ -5,7 +5,7 @@ const mongoosePaginate = require("mongoose-paginate");
 const LinkSchema: Schema = new Schema({
     description: {type: String, required: true},
     url: {type: String, required: true, unique: true},
-    // user_id: {type: Types.ObjectId, ref: "User",required: true}
+    postedBy: {type: Types.ObjectId, ref: "User",required: true}
 });
 
 LinkSchema.plugin(mongoosePaginate);

@@ -1,9 +1,10 @@
 import IBaseDto from "./base.dto";
+import IUserDto from "./user.dto";
 
 interface ILinkDto extends IBaseDto{
   description: string,
   url: string,
-  //user_id: string
+  postedBy: IUserDto
 };
 
 export default ILinkDto;

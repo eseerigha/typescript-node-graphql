@@ -4,10 +4,14 @@ import {IUserRepository} from "./IUser.repository";
 import {IWritable} from "./IWritable";
 import {IReadable} from "./IReadable";
 
+
+import {IAuthService} from "./IAuth.service";
+
 export {
     IReadable,
     IWritable,
     IUserRepository,
     ILinkRepository,
-    IBaseRepository
+    IBaseRepository,
+    IAuthService
 }
