@@ -2,11 +2,12 @@ require("dotenv").config();
 
 import express from "express";
 import ExpressGraphQL from "express-graphql";
+
 const app = express();
-import connectDb from "./modules/database";
-import * as repositories from "./ioc/root";
 const port = `${process.env.SERVER_PORT}`;
 import schema from "./graphql";
+import connectDb from "./modules/database";
+import * as repositories from "./ioc/root";
 
 
 app.use("/graphql", ExpressGraphQL({
@@ -28,7 +29,3 @@ connectDb().then( async()=> {
 
 })
 .catch((err)=> console.log(err));
-
-
-
-// mongodb://<dbuser>:<dbpassword>@ds157571.mlab.com:57571/db_name
