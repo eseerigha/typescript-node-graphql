@@ -1,17 +1,13 @@
 require("dotenv").config();
-import {readFileSync} from "fs";
-import {join} from "path";
-import {makeExecutableSchema} from "graphql-tools";
+
 import express from "express";
 import ExpressGraphQL from "express-graphql";
-import resolvers from "./graphql/resolvers";
-const schemaFile  = join(__dirname,"/graphql/schema.graphql");
-const typeDefs = readFileSync(schemaFile, 'utf8');
 const app = express();
-const port = `${process.env.SERVER_PORT}`;
-const schema = makeExecutableSchema({typeDefs,resolvers});
-import * as repositories from "./ioc/root";
 import connectDb from "./modules/database";
+import * as repositories from "./ioc/root";
+const port = `${process.env.SERVER_PORT}`;
+import schema from "./graphql";
+
 
 app.use("/graphql", ExpressGraphQL({
   schema,
