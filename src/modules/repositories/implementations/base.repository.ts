@@ -9,7 +9,7 @@ import {IBaseDto} from "../../dto";
 @injectable()
 class BaseRepository<T extends IBaseEntity> implements IBaseRepository<T> {
 
-    private _model: Model<Document>;
+    protected _model: Model<Document>;
 
     constructor(@unmanaged() schemaModel: Model<Document>){
         this._model = schemaModel;
@@ -24,8 +24,12 @@ class BaseRepository<T extends IBaseEntity> implements IBaseRepository<T> {
         return this._model.find(query).lean().exec();
     }
 
+    public async findOne(query: IBaseQuery = {}): Promise<T>{
+        return this._model.findOne(query).lean().exec();
+    }
+
     public async findOneById(id: string): Promise<T> {
-        return this._model.findById(this.toObjectId(id)).lean().exec();
+        return this._model.findById(id).lean().exec();
     }
 
     public async update(): Promise<any> {

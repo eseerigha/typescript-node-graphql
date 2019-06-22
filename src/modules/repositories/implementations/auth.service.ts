@@ -1,13 +1,14 @@
-
+import { injectable} from "inversify";
 import {IAuthService} from "../interfaces";
 import {hashSync, compareSync} from "bcryptjs";
 import {sign} from "jsonwebtoken";
 import {IUserDto} from "../../dto";
 
+@injectable()
 class AuthService implements IAuthService {
 
     constructor(){
-
+        
     }
 
     hashPassword(plainText: string): string {

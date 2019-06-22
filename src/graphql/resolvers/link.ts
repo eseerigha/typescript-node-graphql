@@ -1,13 +1,16 @@
 import {ILinkDto} from "../../modules/dto";
-import {ILinkRepository} from "../../modules/repositories/interfaces";
+import {IUserRepository} from "../../modules/repositories/interfaces";
+import mapper, {SCHEMATYPES,DTOTYPES} from "../../modules/mapping";
 
-const id = async function(parent: any, args: ILinkDto, {linkRepository}:{linkRepository:ILinkRepository}, info: any){
-    console.log("parent");
-    console.log(parent);
-    return parent._id;
+const postedBy = async function(parent: any, args: ILinkDto, context: any, info: any){
+
+    const {userRepository}:{userRepository: IUserRepository} = context;
+    let user =  await userRepository.findOneById(parent.postedBy);
+    user = mapper.map(SCHEMATYPES.UserSchema, DTOTYPES.UserDto,user);
+    return user;
 };
 
 
 export {
-    id
+    postedBy
 }
