@@ -1,7 +1,9 @@
 require("dotenv").config();
-
-import express from "express";
+import { Server } from 'http';
+import { SubscriptionServer } from 'subscriptions-transport-ws';
+import express,{Request} from "express";
 import ExpressGraphQL from "express-graphql";
+import { execute, subscribe } from 'graphql';
 
 const app = express();
 const port = `${process.env.SERVER_PORT}`;
@@ -10,22 +12,37 @@ import connectDb from "./modules/database";
 import * as repositories from "./ioc/root";
 
 
-app.use("/graphql", ExpressGraphQL({
-  schema,
-  graphiql: true,
-  context: {
-    ...repositories
+app.use("/api/graphql", ExpressGraphQL((request: Request) =>{
+
+  return {
+    schema,
+    graphiql: true,
+    context: {
+      ...repositories,
+      request
+    }
   }
+
 }));
+
+// Making plain HTTP server for Websocket usage
+const server = new Server(app);
+
+/** GraphQL Websocket definition **/
+SubscriptionServer.create({
+  schema,
+  execute,
+  subscribe,
+}, {
+  server: server,
+  path: '/api/ws',
+},);
 
 connectDb().then( async()=> {
   console.log("Db connection successful");
-  app.listen(port, (err) => {
-    if (err) {
-      return console.error(err);
-    }
-    return console.log(`server is listening on ${port}`);
-  });
+  server.listen(port, () => {
+    console.log(`Server started on port ${port}`);
+  }).on("error",(err)=> console.log(err));
 
 })
 .catch((err)=> console.log(err));

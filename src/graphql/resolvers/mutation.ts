@@ -2,10 +2,13 @@ import {ILinkDto, IUserDto, IAuthResponseDto} from "../../modules/dto";
 import {ILinkRepository, IUserRepository, IAuthService} from "../../modules/repositories/interfaces";
 import mapper, {SCHEMATYPES,DTOTYPES} from "../../modules/mapping";
 import {IUserQuery} from "../../modules/query";
+import {getUserId} from "../../utils/auth";
 
-const createLink = async function(parent: any, args: ILinkDto, context: any, info: any){
+const createLink = async function(parent: any, args: IUserDto, context: any, info: any){
 
     const {linkRepository}:{linkRepository: ILinkRepository} = context;
+    //const userId = getUserId(context);
+    //args.postedBy = userId;
     let link = await linkRepository.create(args);
     const newLink: ILinkDto = mapper.map(SCHEMATYPES.LinkSchema, DTOTYPES.LinkDto,link);
     return newLink;

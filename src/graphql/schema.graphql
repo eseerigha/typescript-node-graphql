@@ -31,7 +31,7 @@
    }
 
    type Mutation {
-      createLink(url: String!, description: String!,postedBy: String!): Link!
+      createLink(url: String!, description: String!, postedBy: String!): Link!
       signup(email: String!, password: String!, name: String!): AuthPayload!
       login(email: String!, password: String!): AuthPayload!
    }
