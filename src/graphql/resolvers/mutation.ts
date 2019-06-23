@@ -3,6 +3,8 @@ import {ILinkRepository, IUserRepository, IAuthService} from "../../modules/repo
 import mapper, {SCHEMATYPES,DTOTYPES} from "../../modules/mapping";
 import {IUserQuery} from "../../modules/query";
 import {getUserId} from "../../utils/auth";
+import {MUTATION_EVENTS, MUTATION_EVENT_TYPES} from "../events";
+import pubsub from "../pubsub";
 
 const createLink = async function(parent: any, args: IUserDto, context: any, info: any){
 
@@ -11,6 +13,16 @@ const createLink = async function(parent: any, args: IUserDto, context: any, inf
     //args.postedBy = userId;
     let link = await linkRepository.create(args);
     const newLink: ILinkDto = mapper.map(SCHEMATYPES.LinkSchema, DTOTYPES.LinkDto,link);
+
+    await pubsub.publish(
+        MUTATION_EVENT_TYPES.LINK_MUTATED,
+        {
+            linkMutated:{
+                mutation: MUTATION_EVENTS.CREATED,
+                node: newLink
+            }
+        }
+    );
     return newLink;
 };
 

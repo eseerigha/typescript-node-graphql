@@ -1,48 +1,33 @@
 require("dotenv").config();
-import { Server } from 'http';
-import { SubscriptionServer } from 'subscriptions-transport-ws';
-import express,{Request} from "express";
-import ExpressGraphQL from "express-graphql";
-import { execute, subscribe } from 'graphql';
+import { ApolloServer } from "apollo-server";
+import express from "express";
 
 const app = express();
 const port = `${process.env.SERVER_PORT}`;
-import schema from "./graphql";
+import {typeDefs,resolvers} from "./graphql";
 import connectDb from "./modules/database";
 import * as repositories from "./ioc/root";
 
 
-app.use("/api/graphql", ExpressGraphQL((request: Request) =>{
-
-  return {
-    schema,
-    graphiql: true,
-    context: {
-      ...repositories,
-      request
-    }
-  }
-
-}));
+const server = new ApolloServer({
+    typeDefs,
+    resolvers,
+    context: ({req}) => {
+      return {
+        ...repositories,
+        req
+      };
+    },
+});
 
 // Making plain HTTP server for Websocket usage
-const server = new Server(app);
-
-/** GraphQL Websocket definition **/
-SubscriptionServer.create({
-  schema,
-  execute,
-  subscribe,
-}, {
-  server: server,
-  path: '/api/ws',
-},);
-
-connectDb().then( async()=> {
+connectDb().then(()=> {
   console.log("Db connection successful");
-  server.listen(port, () => {
-    console.log(`Server started on port ${port}`);
-  }).on("error",(err)=> console.log(err));
+
+  server.listen(port).then(({url,subscriptionsUrl}) => {
+    console.log(`Server started on ${url}`);
+    console.log(`Subscription started on ${subscriptionsUrl}`);
+  }).catch(err=> console.log(err));
 
 })
 .catch((err)=> console.log(err));
