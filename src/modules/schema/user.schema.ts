@@ -1,6 +1,7 @@
 import {Schema,model,Model,Types} from "mongoose";
 import {IUserEntity} from "../entities/IUser.entity";
-const mongoosePaginate = require("mongoose-paginate");
+import mongoosePaginate from "mongoose-paginate-v2";
+import BaseModel from "./base.model";
 
 
 const UserSchema: Schema = new Schema({
@@ -11,5 +12,5 @@ const UserSchema: Schema = new Schema({
 
 UserSchema.plugin(mongoosePaginate);
 
-const User: Model<IUserEntity> = model<IUserEntity>("User",UserSchema);
+const User: BaseModel<IUserEntity> = model<IUserEntity>("User",UserSchema) as BaseModel<IUserEntity>;
 export default User;

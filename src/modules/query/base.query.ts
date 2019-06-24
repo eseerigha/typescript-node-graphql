@@ -1,7 +1,4 @@
 interface IBaseQuery{
-  pagination?:{
-    skip?: number,
-    page?: number
-  }
+  _id?: string
 }
 export default IBaseQuery;

@@ -1,27 +1,28 @@
 import { injectable, unmanaged } from "inversify";
-import {Document, Model} from "mongoose";
+import {Document, PaginateResult} from "mongoose";
 import {IBaseEntity} from "../../entities/IBase.entity";
 import {IBaseRepository} from "../interfaces/IBase.repository";
 import {Types} from "mongoose";
-import {IBaseQuery} from "../../query";
+import {IBaseQuery, IPaginationQuery} from "../../query";
 import {IBaseDto} from "../../dto";
+import BaseModel from "../../schema/base.model";
 
 @injectable()
 class BaseRepository<T extends IBaseEntity> implements IBaseRepository<T> {
 
-    protected _model: Model<Document>;
+    protected _model: BaseModel<T>;
 
-    constructor(@unmanaged() schemaModel: Model<Document>){
+    constructor(@unmanaged() schemaModel: BaseModel<T>){
         this._model = schemaModel;
     }
 
-    public async create(model: IBaseDto): Promise<any> {
+    public async create(model: IBaseDto): Promise<T> {
         const createdEntity = new this._model(model);
         return await createdEntity.save();
     }
 
-    public async findAll(query: IBaseQuery = {}): Promise<T[]>{
-        return this._model.find(query).lean().exec();
+    public async findAll(query: IBaseQuery = {}, paginateQuery: IPaginationQuery = {}): Promise<PaginateResult<T>>{
+        return await this._model.paginate(query,paginateQuery);
     }
 
     public async findOne(query: IBaseQuery = {}): Promise<T>{
