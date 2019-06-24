@@ -40,8 +40,7 @@ const typeDef = gql`
    }
 
    type Query {
-      info: String!
-      feed: [Link!]!
+      feed(page: Int, skip: Int): [Link!]!
       users: [User!]!
    }
 

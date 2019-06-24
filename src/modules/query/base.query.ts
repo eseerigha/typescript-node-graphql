@@ -1,6 +1,7 @@
-import {Types} from "mongoose";
-
 interface IBaseQuery{
-  _id? : Types.ObjectId
+  pagination?:{
+    skip?: number,
+    page?: number
+  }
 }
 export default IBaseQuery;

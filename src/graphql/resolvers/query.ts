@@ -7,7 +7,7 @@ const feed = async function(parent: any, args: ILinkDto, context: any, info: any
     const {linkRepository}:{linkRepository: ILinkRepository} = context;
     let items =  await linkRepository.findAll();
 
-    items =  items.map((item)=> mapper.map(SCHEMATYPES.LinkSchema, DTOTYPES.LinkDto,item));
+    items = items.map((item)=> mapper.map(SCHEMATYPES.LinkSchema, DTOTYPES.LinkDto,item));
     return items;
 };
 

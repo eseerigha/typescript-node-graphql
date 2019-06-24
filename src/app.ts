@@ -1,8 +1,6 @@
 require("dotenv").config();
 import { ApolloServer } from "apollo-server";
-import express from "express";
 
-const app = express();
 const port = `${process.env.SERVER_PORT}`;
 import {typeDefs,resolvers} from "./graphql";
 import connectDb from "./modules/database";
@@ -20,8 +18,9 @@ const server = new ApolloServer({
     },
 });
 
-// Making plain HTTP server for Websocket usage
+
 connectDb().then(()=> {
+
   console.log("Db connection successful");
 
   server.listen(port).then(({url,subscriptionsUrl}) => {

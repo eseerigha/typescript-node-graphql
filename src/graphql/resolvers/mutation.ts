@@ -44,7 +44,12 @@ const login = async function(parent: any, args: IUserDto, context: any, info: an
     let authResponse: IAuthResponseDto = {};
     const {userRepository,authService}:{userRepository: IUserRepository, authService: IAuthService} = context;
     
-    let query: IUserQuery = {email: args.email};
+    let query: IUserQuery = {
+        
+                query: {
+                    email: args.email
+                }
+            };
     
     const user = await userRepository.findOne(query);
     
