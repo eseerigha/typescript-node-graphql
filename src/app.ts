@@ -1,7 +1,7 @@
 require("dotenv").config();
 import { ApolloServer } from "apollo-server";
 
-const port = `${process.env.SERVER_PORT}`;
+const port = `${process.env.SERVER_PORT}` || 7000;
 import {typeDefs,resolvers} from "./graphql";
 import connectDb from "./modules/database";
 import * as repositories from "./ioc/root";

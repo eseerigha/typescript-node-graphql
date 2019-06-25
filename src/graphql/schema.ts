@@ -40,7 +40,7 @@ const typeDef = gql`
    }
 
    type Query {
-      feed(page: Int, skip: Int): [Link!]!
+      feed(page: Int, limit: Int): [Link!]!
       users: [User!]!
    }
 
