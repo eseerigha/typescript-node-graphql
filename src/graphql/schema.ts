@@ -39,9 +39,21 @@ const typeDef = gql`
       DELETED
    }
 
+   type PaginateResult {
+      docs: [Link!]!
+      totalDocs: Int
+      limit: Int
+      hasPrevPage: Boolean
+      hasNextPage: Boolean
+      page: Int
+      totalPages: Int
+      prevPage: Int
+      nextPage: Int
+   }
+
    type Query {
-      feed(page: Int, limit: Int): [Link!]!
-      users: [User!]!
+      feed(page: Int, limit: Int): PaginateResult!
+      users(page: Int, limit: Int): PaginateResult!
    }
 
    type Mutation {

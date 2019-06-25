@@ -1,6 +1,7 @@
 interface IPaginationQuery{
     limit?: number,
-    page?: number
+    page?: number,
+    lean?: boolean
 }
 
 export default IPaginationQuery;
