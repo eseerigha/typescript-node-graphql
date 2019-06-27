@@ -1,15 +1,14 @@
 require("dotenv").config();
-import { ApolloServer } from "apollo-server";
+import { ApolloServer, makeExecutableSchema } from "apollo-server";
 
 const port = `${process.env.SERVER_PORT}` || 7000;
-import {typeDefs,resolvers} from "./graphql";
+import schema from "./graphql";
 import connectDb from "./modules/database";
 import * as repositories from "./ioc/root";
 
 
 const server = new ApolloServer({
-    typeDefs,
-    resolvers,
+    schema,
     context: ({req}) => {
       return {
         ...repositories,

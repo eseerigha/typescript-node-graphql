@@ -1,6 +1,6 @@
-import {gql} from "apollo-server";
+//import {gql} from "apollo-server";
 
-const typeDef = gql`
+const typeDef =`
 
    type User {
      id: ID!
@@ -39,8 +39,8 @@ const typeDef = gql`
       DELETED
    }
 
-   type PaginateResult {
-      docs: [Link!]!
+   type PaginateResult<T> {
+      docs: [T!]!
       totalDocs: Int
       limit: Int
       hasPrevPage: Boolean
@@ -52,8 +52,8 @@ const typeDef = gql`
    }
 
    type Query {
-      feed(page: Int, limit: Int): PaginateResult!
-      users(page: Int, limit: Int): PaginateResult!
+      feed(page: Int, limit: Int): PaginateResult<Link>!
+      users(page: Int, limit: Int): PaginateResult<User>!
    }
 
    type Mutation {

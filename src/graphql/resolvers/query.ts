@@ -2,11 +2,11 @@ import {PaginateResult} from "mongoose";
 import {IUserDto} from "../../modules/dto";
 import {ILinkRepository, IUserRepository} from "../../modules/repositories/interfaces";
 import mapper, {SCHEMATYPES,DTOTYPES} from "../../modules/mapping";
-import { ILinkEntity } from "../../modules/entities/ILink.entity";
+import { ILinkEntity, IUserEntity } from "../../modules/entities";
 import {IPaginationQuery} from "../../modules/query";
 import {validatePaginationQueryModel} from "../../modules/middleware/validation";
 
-const feed = validatePaginationQueryModel(async(parent: any, args: IPaginationQuery, context: any, info: any)=>{
+const feed = validatePaginationQueryModel( async(parent: any, args: IPaginationQuery, context: any, info: any)=>{
     
     const {linkRepository}:{linkRepository: ILinkRepository} = context;
     const query = {};
@@ -21,14 +21,20 @@ const feed = validatePaginationQueryModel(async(parent: any, args: IPaginationQu
     return result;
 });
 
-const users = async function(parent: any, args: IUserDto, context: any, info: any){
+const users = validatePaginationQueryModel( async(parent: any, args: IPaginationQuery, context: any, info: any)=>{
     
     const {userRepository}:{userRepository: IUserRepository} = context;
-    let items =  await userRepository.findAll();
+    const query = {};
+    const paginateQuery : IPaginationQuery = {
+        page: args.page || 1,
+        limit: args.limit || 10,
+        lean: true
+    };
 
-    //items =  items.map((item)=> mapper.map(SCHEMATYPES.UserSchema, DTOTYPES.UserDto,item));
-    return items;
-};
+    let result: PaginateResult<IUserEntity> =  await userRepository.findAll(query,paginateQuery);
+    result.docs = result.docs.map((item)=> mapper.map(SCHEMATYPES.UserSchema, DTOTYPES.UserDto,item));
+    return result;
+});
 
 
 export {
