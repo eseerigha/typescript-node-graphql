@@ -25,7 +25,6 @@ const typeDef =`
    type AuthPayload {
       token: String
       user: User
-      error: String
    }
 
    type LinkMutationPayload {

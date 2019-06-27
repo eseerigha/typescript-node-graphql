@@ -1,20 +1,21 @@
 require("dotenv").config();
-import { ApolloServer, makeExecutableSchema } from "apollo-server";
+import { ApolloServer} from "apollo-server";
 
 const port = `${process.env.SERVER_PORT}` || 7000;
 import schema from "./graphql";
 import connectDb from "./modules/database";
 import * as repositories from "./ioc/root";
+import {getAccessTokenFromRequestHeaders} from "./utils/auth";
 
 
 const server = new ApolloServer({
     schema,
-    context: ({req}) => {
+    context: ({req, res}) => {
       return {
         ...repositories,
-        req
+        token: getAccessTokenFromRequestHeaders(req)
       };
-    },
+    }
 });
 
 

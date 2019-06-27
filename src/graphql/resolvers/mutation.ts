@@ -1,16 +1,14 @@
-import {ILinkDto, IUserDto, IAuthResponseDto} from "../../modules/dto";
+import {AuthenticationError} from "apollo-server";
+import {ILinkDto, IUserDto, IAuthResponseDto, ILoginDto} from "../../modules/dto";
 import {ILinkRepository, IUserRepository, IAuthService} from "../../modules/repositories/interfaces";
 import mapper, {SCHEMATYPES,DTOTYPES} from "../../modules/mapping";
 import {IUserQuery} from "../../modules/query";
-import {getUserId} from "../../utils/auth";
 import {MUTATION_EVENTS, MUTATION_EVENT_TYPES} from "../events";
 import pubsub from "../pubsub";
 
 const createLink = async function(parent: any, args: IUserDto, context: any, info: any){
 
     const {linkRepository}:{linkRepository: ILinkRepository} = context;
-    //const userId = getUserId(context);
-    //args.postedBy = userId;
     let link = await linkRepository.create(args);
     const newLink: ILinkDto = mapper.map(SCHEMATYPES.LinkSchema, DTOTYPES.LinkDto,link);
 
@@ -39,8 +37,8 @@ const signup = async function(parent: any, args: IUserDto, context: any, info: a
     return authResponse;
 };
 
-const login = async function(parent: any, args: IUserDto, context: any, info: any){
-    let authErrorMessage = "Invalid username or password";
+const login = async function(parent: any, args: ILoginDto, context: any, info: any){
+
     let authResponse: IAuthResponseDto = {};
     const {userRepository,authService}:{userRepository: IUserRepository, authService: IAuthService} = context;
     
@@ -63,9 +61,7 @@ const login = async function(parent: any, args: IUserDto, context: any, info: an
             return authResponse;
         }
     }
-
-    authResponse.error = authErrorMessage;
-    return authResponse;
+    throw new AuthenticationError("Invalid username or password");
 };
 
 export {

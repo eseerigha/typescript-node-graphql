@@ -16,7 +16,7 @@ class AuthService implements IAuthService {
     }
 
     generateToken(user: IUserDto, secretKey: string): string {
-        return sign(user,secretKey);
+        return sign(user,secretKey,{expiresIn: "365 days"});
     }
 
     verifyPassword(plainText: string, hashedPassword: string): boolean {

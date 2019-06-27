@@ -1,12 +1,12 @@
 import {PaginateResult} from "mongoose";
-import {IUserDto} from "../../modules/dto";
 import {ILinkRepository, IUserRepository} from "../../modules/repositories/interfaces";
 import mapper, {SCHEMATYPES,DTOTYPES} from "../../modules/mapping";
 import { ILinkEntity, IUserEntity } from "../../modules/entities";
 import {IPaginationQuery} from "../../modules/query";
 import {validatePaginationQueryModel} from "../../modules/middleware/validation";
+import {authenticated} from "../../modules/middleware/authentication";
 
-const feed = validatePaginationQueryModel( async(parent: any, args: IPaginationQuery, context: any, info: any)=>{
+const feed = authenticated(validatePaginationQueryModel( async(parent: any, args: IPaginationQuery, context: any, info: any)=>{
     
     const {linkRepository}:{linkRepository: ILinkRepository} = context;
     const query = {};
@@ -19,9 +19,9 @@ const feed = validatePaginationQueryModel( async(parent: any, args: IPaginationQ
     let result: PaginateResult<ILinkEntity> =  await linkRepository.findAll(query,paginateQuery);
     result.docs = result.docs.map((item)=> mapper.map(SCHEMATYPES.LinkSchema, DTOTYPES.LinkDto,item));
     return result;
-});
+}));
 
-const users = validatePaginationQueryModel( async(parent: any, args: IPaginationQuery, context: any, info: any)=>{
+const users = authenticated(validatePaginationQueryModel( async(parent: any, args: IPaginationQuery, context: any, info: any)=>{
     
     const {userRepository}:{userRepository: IUserRepository} = context;
     const query = {};
@@ -34,7 +34,7 @@ const users = validatePaginationQueryModel( async(parent: any, args: IPagination
     let result: PaginateResult<IUserEntity> =  await userRepository.findAll(query,paginateQuery);
     result.docs = result.docs.map((item)=> mapper.map(SCHEMATYPES.UserSchema, DTOTYPES.UserDto,item));
     return result;
-});
+}));
 
 
 export {
