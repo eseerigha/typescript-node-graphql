@@ -1,12 +1,12 @@
-import {AuthenticationError} from "apollo-server";
 import {PaginateResult} from "mongoose";
-import {ILinkDto, IUserDto} from "../../modules/dto";
+import {IUserDto} from "../../modules/dto";
 import {ILinkRepository, IUserRepository} from "../../modules/repositories/interfaces";
 import mapper, {SCHEMATYPES,DTOTYPES} from "../../modules/mapping";
 import { ILinkEntity } from "../../modules/entities/ILink.entity";
 import {IPaginationQuery} from "../../modules/query";
+import {validatePaginationQueryModel} from "../../modules/middleware/validation";
 
-const feed = async function(parent: any, args: IPaginationQuery, context: any, info: any){
+const feed = validatePaginationQueryModel(async(parent: any, args: IPaginationQuery, context: any, info: any)=>{
     
     const {linkRepository}:{linkRepository: ILinkRepository} = context;
     const query = {};
@@ -19,7 +19,7 @@ const feed = async function(parent: any, args: IPaginationQuery, context: any, i
     let result: PaginateResult<ILinkEntity> =  await linkRepository.findAll(query,paginateQuery);
     result.docs = result.docs.map((item)=> mapper.map(SCHEMATYPES.LinkSchema, DTOTYPES.LinkDto,item));
     return result;
-};
+});
 
 const users = async function(parent: any, args: IUserDto, context: any, info: any){
     

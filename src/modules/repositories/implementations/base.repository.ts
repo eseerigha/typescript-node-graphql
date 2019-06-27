@@ -21,7 +21,7 @@ class BaseRepository<T extends IBaseEntity> implements IBaseRepository<T> {
         return await createdEntity.save();
     }
 
-    public async findAll(query: IBaseQuery = {}, paginateQuery: IPaginationQuery = {}): Promise<PaginateResult<T>>{
+    public async findAll(query: IBaseQuery = {}, paginateQuery: IPaginationQuery): Promise<PaginateResult<T>>{
         return await this._model.paginate(query,paginateQuery);
     }
 

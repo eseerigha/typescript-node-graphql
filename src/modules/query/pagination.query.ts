@@ -1,6 +1,6 @@
 interface IPaginationQuery{
-    limit?: number,
-    page?: number,
+    limit: number,
+    page: number,
     lean?: boolean
 }
 
