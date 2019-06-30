@@ -1,5 +1,5 @@
 import { injectable, unmanaged } from "inversify";
-import {Document, PaginateResult} from "mongoose";
+import {PaginateResult} from "mongoose";
 import {IBaseEntity} from "../../entities/IBase.entity";
 import {IBaseRepository} from "../interfaces/IBase.repository";
 import {Types} from "mongoose";
@@ -45,6 +45,6 @@ class BaseRepository<T extends IBaseEntity> implements IBaseRepository<T> {
     private toObjectId(_id: string): Types.ObjectId {
         return Types.ObjectId.createFromHexString(_id);
     }
-}
+};
 
 export default BaseRepository;

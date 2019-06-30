@@ -10,5 +10,6 @@ class LinkRepository extends BaseRepository<ILinkEntity> implements ILinkReposit
     constructor(){
         super(LinkSchema);
     }
-}
+};
+
 export default LinkRepository;

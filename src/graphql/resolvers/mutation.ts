@@ -31,7 +31,7 @@ const signup = async function(parent: any, args: IUserDto, context: any, info: a
     args = Object.assign({},args,{password});
     const user = await userRepository.create(args);
     const newUser: IUserDto = mapper.map(SCHEMATYPES.UserSchema, DTOTYPES.UserDto,user);
-    const token: string = authService.generateToken(newUser,`${process.env.PASSWORD_SECRET_KEY}`);
+    const token: string =  await authService.generateToken(newUser,`${process.env.PASSWORD_SECRET_KEY}`);
     
     let authResponse: IAuthResponseDto = {token,user: newUser};
     return authResponse;
@@ -53,7 +53,7 @@ const login = async function(parent: any, args: ILoginDto, context: any, info: a
         const isValidPassword = authService.verifyPassword(args.password,user.password);
         if(isValidPassword){
             const newUser: IUserDto = mapper.map(SCHEMATYPES.UserSchema, DTOTYPES.UserDto,user);
-            const token: string = authService.generateToken(newUser,`${process.env.PASSWORD_SECRET_KEY}`);
+            const token: string = await authService.generateToken(newUser,`${process.env.PASSWORD_SECRET_KEY}`);
 
             authResponse.token = token;
             authResponse.user = newUser;

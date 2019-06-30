@@ -7,16 +7,20 @@ import {IUserDto} from "../../dto";
 @injectable()
 class AuthService implements IAuthService {
 
-    constructor(){
-        
-    }
+    constructor(){}
 
     hashPassword(plainText: string): string {
         return hashSync(plainText);
     }
 
-    generateToken(user: IUserDto, secretKey: string): string {
-        return sign(user,secretKey,{expiresIn: "365 days"});
+    generateToken(user: IUserDto, secretKey: string): Promise<string> {
+
+        return new Promise((resolve,reject)=>{
+            sign(user,secretKey,{expiresIn: "365 days"}, (err,token)=>{
+                if(err) reject(err);
+                resolve(token);
+            });
+        });
     }
 
     verifyPassword(plainText: string, hashedPassword: string): boolean {
