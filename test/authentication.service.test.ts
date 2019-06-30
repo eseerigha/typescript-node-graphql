@@ -10,8 +10,8 @@ import {IUserDto} from "../src/modules/dto";
 describe("Authservice test",()=>{
 
     const stubHash = "abcdefghij";
-        const stubPassword = "Hello World";
-        const bcryptStub = stub(bcryptjs,"hashSync").withArgs(stubPassword).returns(stubHash);
+    const stubPassword = "Hello World";
+    const bcryptStub = stub(bcryptjs,"hashSync").withArgs(stubPassword).returns(stubHash);
 
     it("should correctly hash password",()=>{
     
@@ -35,9 +35,10 @@ describe("Authservice test",()=>{
 
         const stubToken = "abcdefghijklmnop";
         const stubSecretKey = "HelloWorld";
-        stub(jsonwebtoken,"sign").yields(null,stubToken);
+        const signStub = stub(jsonwebtoken,"sign").yields(null,stubToken);
         const token = await authService.generateToken(stubUser,stubSecretKey);
         
         expect(token).to.equals(stubToken);
+        expect(signStub.calledOnce).to.be.true;
     });
 });
