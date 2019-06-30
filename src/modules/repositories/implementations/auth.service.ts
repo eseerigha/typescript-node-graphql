@@ -27,8 +27,16 @@ class AuthService implements IAuthService {
         return compareSync(plainText,hashedPassword);
     }
 
-    verifyToken(token: string, secretKey: string): any {
-        return verify(token,secretKey);
+    verifyToken(token: string, secretKey: string): Promise<IUserDto> {
+        
+        return new Promise((resolve, reject)=>{
+            
+            verify(token,secretKey,(err,response:any)=>{
+                if(err) reject(err);
+                resolve(response);
+            });
+
+        });
     }
 }
 

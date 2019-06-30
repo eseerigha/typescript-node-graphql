@@ -14,14 +14,17 @@ describe("Authservice test",()=>{
     const bcryptStub = stub(bcryptjs,"hashSync").withArgs(stubPassword).returns(stubHash);
 
     it("should correctly hash password",()=>{
-    
+
         const hashedPassword = authService.hashPassword(stubPassword);
         expect(hashedPassword).to.equals(stubHash);
         expect(bcryptStub.calledOnce).to.be.true;
+
     });
 
     it("should call hash function exactly once",()=>{
+
         expect(bcryptStub.calledOnce).to.be.true;
+
     });
 
     it("should correctly generate token",async ()=>{
@@ -41,5 +44,32 @@ describe("Authservice test",()=>{
         expect(token).to.equals(stubToken);
         expect(signStub.calledOnce).to.be.true;
     });
+
+    it("should verify password", ()=>{
+        
+        const stubCompareSync = stub(bcryptjs,"compareSync").withArgs(stubPassword, stubHash).returns(true);
+        const verifyPasswordStatus = authService.verifyPassword(stubPassword, stubHash);
+        expect(verifyPasswordStatus).to.be.true;
+        expect(stubCompareSync.calledOnce).to.be.true;
+    });
+
+    it("should correctly verify token",async ()=>{
+        
+        const stubUser : IUserDto = {
+            id: "1",
+            name: "Ese Erigha",
+            email: "ese.erigha@gmail.com",
+            password: "groupon"
+        };
+
+        const stubToken = "abcdefghijklmnop";
+        const stubSecretKey = "HelloWorld";
+        const verifyStub = stub(jsonwebtoken,"verify").yields(null,stubUser);
+        const user = await authService.verifyToken(stubToken,stubSecretKey);
+        
+        expect(user).to.equals(stubUser);
+        expect(verifyStub.calledOnce).to.be.true;
+    });
+    
     
 });
