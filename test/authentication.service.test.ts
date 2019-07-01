@@ -12,6 +12,14 @@ describe("Authservice test",()=>{
     const stubHash = "abcdefghij";
     const stubPassword = "Hello World";
     const bcryptStub = stub(bcryptjs,"hashSync").withArgs(stubPassword).returns(stubHash);
+    const stubToken = "abcdefghijklmnop";
+    const stubSecretKey = "HelloWorld";
+    const stubUser : IUserDto = {
+        id: "1",
+        name: "Ese Erigha",
+        email: "ese.erigha@gmail.com",
+        password: "groupon"
+    };
 
     it("should correctly hash password",()=>{
 
@@ -29,15 +37,6 @@ describe("Authservice test",()=>{
 
     it("should correctly generate token",async ()=>{
         
-        const stubUser : IUserDto = {
-            id: "1",
-            name: "Ese Erigha",
-            email: "ese.erigha@gmail.com",
-            password: "groupon"
-        };
-
-        const stubToken = "abcdefghijklmnop";
-        const stubSecretKey = "HelloWorld";
         const signStub = stub(jsonwebtoken,"sign").yields(null,stubToken);
         const token = await authService.generateToken(stubUser,stubSecretKey);
         
@@ -55,15 +54,6 @@ describe("Authservice test",()=>{
 
     it("should correctly verify token",async ()=>{
         
-        const stubUser : IUserDto = {
-            id: "1",
-            name: "Ese Erigha",
-            email: "ese.erigha@gmail.com",
-            password: "groupon"
-        };
-
-        const stubToken = "abcdefghijklmnop";
-        const stubSecretKey = "HelloWorld";
         const verifyStub = stub(jsonwebtoken,"verify").yields(null,stubUser);
         const user = await authService.verifyToken(stubToken,stubSecretKey);
         
