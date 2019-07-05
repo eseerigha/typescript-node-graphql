@@ -10,6 +10,7 @@ export const authenticated = (next: any) => async(root: any, args: any, context:
         context = Object.assign({},context,{userId : id});
 
     }catch(err){
+        console.log(err);
         throw new AuthenticationError("Invalid token");
     }
     
